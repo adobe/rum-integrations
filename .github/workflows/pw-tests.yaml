@@ -13,7 +13,7 @@ jobs:
     - name: Install Google Bigquery CLI
       run: sudo apt-get install google-cloud-cli
     - name: Authenticate with Google Cloud
-      run: echo GCLOUD_CRED_FILE > gcloud.json && gcloud auth login --cred-file=./gcloud.json ; rm gcloud.json
+      run: echo $GCLOUD_CRED_FILE > ./gcloud.json && ls -la . && gcloud auth login --cred-file=./gcloud.json ; rm gcloud.json
     - name: Install dependencies
       run: gcloud auth list && cd test/pw && npm ci
     - name: Install Playwright Browsers
