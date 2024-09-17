@@ -13,7 +13,7 @@ jobs:
     - name: Install dependencies
       run: cd test/pw && npm ci
     - name: Install Playwright Browsers
-      run: cd test/pw && npx playwright install --with-deps --project=chromium
+      run: cd test/pw && npx playwright install --with-deps chromium
     - name: Run Playwright tests
       run: cd test/pw && npm run test
     - uses: actions/upload-artifact@v4
