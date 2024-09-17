@@ -20,7 +20,7 @@ test('Make a request that triggers a RUM request', async ({ page }) => {
   await page.waitForTimeout(5000);
 
   const cmdline =
-    `xbq query --format json --nouse_legacy_sql 'SELECT count(*) FROM \`helix-225321.helix_rum.cluster\`
+    `bq query --format json --nouse_legacy_sql 'SELECT count(*) FROM \`helix-225321.helix_rum.cluster\`
     WHERE url = "https://main--rum-integrations--adobe.aem.live/" AND id = "${testID}" LIMIT 10'`;
   console.log('Executing: ', cmdline);
 
