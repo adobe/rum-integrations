@@ -11,8 +11,9 @@ jobs:
       with:
         node-version: lts/*
     - name: Install Google Bigquery CLI
-      run: python3 -V
-      # run: sudo apt-get install google-cloud-sdk
+      run: sudo apt-get install google-cloud-sdk
+    - name: Install Google Bigquery CLI 2
+      run: sudo apt-get install google-cloud-cli
     - name: Install dependencies
       run: cd test/pw && npm ci
     - name: Install Playwright Browsers
