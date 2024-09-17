@@ -1,3 +1,6 @@
+/*
+ eslint-disable no-console, import/no-unresolved
+ */
 // @ts-check
 const { defineConfig, devices } = require('@playwright/test');
 
