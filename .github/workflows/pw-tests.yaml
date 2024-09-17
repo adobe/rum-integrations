@@ -17,11 +17,11 @@ jobs:
         GCLOUD_CRED_FILE: ${{ secrets.GCLOUD_CRED_FILE }}
       run: echo $GCLOUD_CRED_FILE > ./gcloud.json && ls -la . && gcloud auth login --cred-file=./gcloud.json ; rm gcloud.json
     - name: Install dependencies
-      run: gcloud auth list && bq version && cd test/pw && npm ci
+      run: cd test/pw && npm ci
     - name: Install Playwright Browsers
       run: cd test/pw && npx playwright install --with-deps chromium
     - name: Run Playwright tests
-      run: cd test/pw && npm run test
+      run: cd test/pw && gcloud auth list && bq version && npm run test
     - uses: actions/upload-artifact@v4
       if: always()
       with:
