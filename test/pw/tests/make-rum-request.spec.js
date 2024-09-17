@@ -1,5 +1,5 @@
 /*
- eslint-disable no-console
+ eslint-disable no-console, import/no-unresolved
  */
 
 const { test, expect } = require('@playwright/test');
