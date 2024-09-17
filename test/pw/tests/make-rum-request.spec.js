@@ -31,6 +31,7 @@ test('Make a request that triggers a RUM request', async ({ page }) => {
     console.error('*** Error:', e);
     console.log('Stdout: ', e.stdout.toString());
     console.log('Stderr: ', e.stderr.toString());
+    throw e;
   }
 
   const result = res.toString()
@@ -41,5 +42,7 @@ test('Make a request that triggers a RUM request', async ({ page }) => {
   const keys = Object.keys(obj);
   const val = obj[keys[0]];
   console.log('Value:', val);
+
+  // Expect at least 2 log entries in google BigQuery with the ID
   expect(Number(val)).toBeGreaterThan(2);
 });
