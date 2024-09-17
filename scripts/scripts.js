@@ -123,7 +123,16 @@ function loadDelayed() {
   // load anything that can be postponed to the latest here
 }
 
+function setupRumTestData() {
+  const rumtestid = new URLSearchParams(window.location.search).get('test_rum_id');
+  if (rumtestid) {
+    window.hlx.rum.id = rumtestid;
+  }
+}
+
 async function loadPage() {
+  setupRumTestData();
+
   await loadEager(document);
   await loadLazy(document);
   loadDelayed();
