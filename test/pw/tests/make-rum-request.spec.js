@@ -21,10 +21,11 @@ test('Make a request that triggers a RUM request', async ({ page }) => {
 
   const cmdline =
     `bq query --format json --nouse_legacy_sql 'SELECT count(*) FROM \`helix-225321.helix_rum.cluster\`
-    WHERE CONTAINS_SUBSTR(url, "rum-integrations") AND id = "${testID}" LIMIT 10' | jq ".[]|.[]"`;
+    WHERE CONTAINS_SUBSTR(url, "rum-integrations") AND id = "${testID}" LIMIT 10' | jq -r ".[]|.[]"`;
   console.log('Executing: ', cmdline);
 
-  let result = execSync(cmdline);
+  let result = execSync(cmdline).trim();
+
   console.log('Result:', result.toString());
-// jq ".[]|.[]
+  expect(Number(result)).toBeGreaterThan(6);
 });
