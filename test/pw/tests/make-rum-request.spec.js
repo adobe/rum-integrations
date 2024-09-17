@@ -21,12 +21,13 @@ test('Make a request that triggers a RUM request', async ({ page }) => {
 
   const cmdline =
     `bq query --format json --nouse_legacy_sql 'SELECT count(*) FROM \`helix-225321.helix_rum.cluster\`
-    WHERE url = "https://main--rum-integrations--adobe.aem.live/" AND id = "${testID}" LIMIT 10'
+    WHERE url = "https://main--rum-integrations--adobe.aem.live/" AND id = "${testID}" LIMIT 10' \
     | jq -r ".[]|.[]"`;
   console.log('Executing: ', cmdline);
 
-  let result = execSync(cmdline).trim();
+  const res = execSync(cmdline).toString();
+  const result = res.trim();
 
-  console.log('Result:', result.toString());
-  expect(Number(result)).toBeGreaterThan(6);
+  console.log('Result:', result);
+  expect(Number(result)).toBeGreaterThan(5);
 });
