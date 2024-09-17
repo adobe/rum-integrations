@@ -1,3 +1,7 @@
+/*
+ eslint-disable no-console
+ */
+
 const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
 
@@ -10,7 +14,6 @@ function getTestID() {
   return RUM_TEST_ID;
 }
 
-
 test('Make a request that triggers a RUM request', async ({ page }) => {
   const testID = getTestID();
   await page.goto(`https://main--rum-integrations--adobe.aem.live/?rum=on&test_rum_id=${testID}`);
@@ -19,8 +22,7 @@ test('Make a request that triggers a RUM request', async ({ page }) => {
   // Wait 5 seconds for the rum request to appear at the backend
   await page.waitForTimeout(5000);
 
-  const cmdline =
-    `bq query --format json --nouse_legacy_sql 'SELECT count(*) FROM \`helix-225321.helix_rum.cluster\`
+  const cmdline = `bq query --format json --nouse_legacy_sql 'SELECT count(*) FROM \`helix-225321.helix_rum.cluster\`
     WHERE url = "https://main--rum-integrations--adobe.aem.live/" AND id = "${testID}" LIMIT 10'`;
   console.log('Executing: ', cmdline);
 
@@ -34,7 +36,7 @@ test('Make a request that triggers a RUM request', async ({ page }) => {
     throw e;
   }
 
-  const result = res.toString()
+  const result = res.toString();
 
   console.log('Result:', result);
   const json = JSON.parse(result);
