@@ -21,8 +21,7 @@ test('Make a request that triggers a RUM request', async ({ page }) => {
 
   const cmdline =
     `bq query --format json --nouse_legacy_sql 'SELECT count(*) FROM \`helix-225321.helix_rum.cluster\`
-    WHERE url = "https://main--rum-integrations--adobe.aem.live/" AND id = "${testID}" LIMIT 10' \
-    | jq -r ".[]|.[]"`;
+    WHERE url = "https://main--rum-integrations--adobe.aem.live/" AND id = "${testID}" LIMIT 10'`;
   console.log('Executing: ', cmdline);
 
   const res = execSync(cmdline).toString();
