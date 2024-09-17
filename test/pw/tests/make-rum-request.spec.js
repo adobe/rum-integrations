@@ -24,16 +24,17 @@ test('Make a request that triggers a RUM request', async ({ page }) => {
     WHERE url = "https://main--rum-integrations--adobe.aem.live/" AND id = "${testID}" LIMIT 10'`;
   console.log('Executing: ', cmdline);
 
+  let res;
   try {
-    const res = execSync(cmdline);
-    console.log('*** Result:', res);
+    res = execSync(cmdline);
   } catch (e) {
     console.error('*** Error:', e);
     console.log('Stdout: ', e.stdout.toString());
     console.log('Stderr: ', e.stderr.toString());
   }
-  // const result = res.trim();
 
-  // console.log('Result:', result);
-  // expect(Number(result)).toBeGreaterThan(5);
+  const result = res.toString().trim();
+
+  console.log('Result:', result);
+  expect(Number(result)).toBeGreaterThan(2);
 });
