@@ -13,6 +13,8 @@ jobs:
     - name: Install Google Bigquery CLI
       run: sudo apt-get install google-cloud-cli
     - name: Authenticate with Google Cloud
+      env:
+        GCLOUD_CRED_FILE: ${{ secrets.GCLOUD_CRED_FILE }}
       run: echo $GCLOUD_CRED_FILE > ./gcloud.json && ls -la . && gcloud auth login --cred-file=./gcloud.json ; rm gcloud.json
     - name: Install dependencies
       run: gcloud auth list && cd test/pw && npm ci
