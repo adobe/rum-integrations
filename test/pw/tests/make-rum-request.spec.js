@@ -33,8 +33,13 @@ test('Make a request that triggers a RUM request', async ({ page }) => {
     console.log('Stderr: ', e.stderr.toString());
   }
 
-  const result = res.toString().trim();
+  const result = res.toString()
 
   console.log('Result:', result);
-  expect(Number(result)).toBeGreaterThan(2);
+  const json = JSON.parse(result);
+  const obj = json[0];
+  const keys = Object.keys(obj);
+  const val = obj[keys[0]];
+  console.log('Value:', val);
+  expect(Number(val)).toBeGreaterThan(2);
 });
