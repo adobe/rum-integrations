@@ -10,6 +10,9 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
+    - name: Install Google Bigquery CLI
+      run: python3 -V
+      # run: sudo apt-get install google-cloud-sdk
     - name: Install dependencies
       run: cd test/pw && npm ci
     - name: Install Playwright Browsers
