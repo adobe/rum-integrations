@@ -32,6 +32,9 @@ jobs:
     - name: Install dependencies
       run: cd test/pw && npm ci
 
+    - name: Try out NS mapping
+      run: echo $(dig +short n.sni.global.fastly.net.) www.blah.bla >> /etc/hosts && nslookup www.blah.bla && cat /etc/hosts
+
     - name: Install Playwright Browsers
       run: cd test/pw && npx playwright install --with-deps chromium
 
