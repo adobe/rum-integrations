@@ -27,8 +27,7 @@ test('Make a request that triggers a RUM request', async ({ page }) => {
   const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
   const yesterdate = yesterday.toISOString().split('T')[0];
 
-  const cmdline = `/* repository: adobe/rum-integrations */
-  bq query --format json --nouse_legacy_sql '
+  const cmdline = `bq query --format json --nouse_legacy_sql '/* repository: adobe/rum-integrations */
     SELECT count(*) FROM \`helix-225321.helix_rum.cluster\`
     WHERE TIMESTAMP_TRUNC(time, DAY) > TIMESTAMP("${yesterdate}")
     AND hostname = "main--rum-integrations--adobe.aem.live" AND id = "${testID}" LIMIT 1'`;
