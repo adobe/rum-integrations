@@ -11,24 +11,19 @@ jobs:
       with:
         node-version: lts/*
 
-    - id: 'auth'
+    - name: Authenticate to Google Cloud
       uses: 'google-github-actions/auth@v2'
       with:
         credentials_json: ${{ secrets.GCLOUD_CRED_FILE }}
 
-    - name: 'Set up Cloud SDK'
+    - name: Set up Cloud SDK
       uses: 'google-github-actions/setup-gcloud@v2'
       with:
         version: '>= 363.0.0'
 
-    - name: 'Use gcloud CLI'
-      run: 'gcloud info'
-    # - name: Install Google Bigquery CLI
-    #   run: sudo apt-get install google-cloud-cli
-    # - name: Authenticate with Google Cloud
-    #   env:
-    #     GCLOUD_CRED_FILE: ${{ secrets.GCLOUD_CRED_FILE }}
-    #   run: echo $GCLOUD_CRED_FILE > ./gcloud.json && gcloud auth login --cred-file=./gcloud.json && gcloud config set project helix-225321 ; rm ./gcloud.json
+    - name: Check gcloud CLI
+      run: gcloud info && gcloud auth list && bq version
+
     - name: Install dependencies
       run: cd test/pw && npm ci
 
@@ -36,7 +31,7 @@ jobs:
       run: cd test/pw && npx playwright install --with-deps chromium
 
     - name: Run Playwright tests
-      run: cd test/pw && gcloud auth list && bq version && npm run test
+      run: cd test/pw && npm run test
 
     - uses: actions/upload-artifact@v4
       if: always()
