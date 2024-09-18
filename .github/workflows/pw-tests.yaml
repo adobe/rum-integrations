@@ -36,7 +36,7 @@ jobs:
       run: sudo echo "$(dig +short n.sni.global.fastly.net.) rum.hlx.page" | sudo tee -a /etc/hosts && sudo echo "$(dig +short n.sni.global.fastly.net.) www.blah.bla" | sudo tee -a /etc/hosts
 
     - name: Try out NS mapping
-      run: sudo cat /etc/hosts && nslookup www.yahoo.com && nslookup rum.hlx.page
+      run: sudo cat /etc/hosts && ping -c 1 rum.hlx.page
 
     - name: Install Playwright Browsers
       run: cd test/pw && npx playwright install --with-deps chromium
