@@ -16,7 +16,9 @@ function getTestID() {
 
 test('Make a request that triggers a RUM request', async ({ page }) => {
   const testID = getTestID();
-  await page.goto(`https://main--rum-integrations--adobe.aem.live/?rum=on&test_rum_id=${testID}`);
+  const testURL = `https://main--rum-integrations--adobe.aem.live/?rum=on&test_rum_id=${testID}`;
+  console.log('Accessing URL:', testURL);
+  await page.goto(testURL);
   await expect(page.getByText('Boilerplate Highlights')).toBeVisible();
 
   // Wait 5 seconds for the rum request to appear at the backend
