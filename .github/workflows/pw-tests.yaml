@@ -32,8 +32,11 @@ jobs:
     - name: Install dependencies
       run: cd test/pw && npm ci
 
+    - name: Set up NS mapping
+      run: sudo echo "$(dig +short n.sni.global.fastly.net.) www.blah.bla" | sudo tee -a /etc/hosts
+
     - name: Try out NS mapping
-      run: sudo echo "$(dig +short n.sni.global.fastly.net.) www.blah.bla" | sudo tee -a /etc/hosts && sudo cat /etc/hosts && nslookup www.blah.bla
+      run: sudo cat /etc/hosts && nslookup www.yahoo.com && nslookup www.blah.bla
 
     - name: Install Playwright Browsers
       run: cd test/pw && npx playwright install --with-deps chromium
