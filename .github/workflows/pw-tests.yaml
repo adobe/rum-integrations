@@ -33,7 +33,7 @@ jobs:
       run: cd test/pw && npm ci
 
     - name: Try out NS mapping
-      run: sudo echo "127.0.0.1 postgres.dolphin.com" | sudo tee -a /etc/hosts
+      run: sudo echo "127.0.0.1 postgres.dolphin.com" | sudo tee -a /etc/hosts && sudo cat /etc/hosts
       #run: sudo echo $(dig +short n.sni.global.fastly.net.) www.blah.bla >> /etc/hosts && nslookup www.blah.bla
 
     - name: Install Playwright Browsers
