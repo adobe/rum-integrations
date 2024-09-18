@@ -33,7 +33,8 @@ jobs:
       run: cd test/pw && npm ci
 
     - name: Set up NS mapping
-      run: sudo echo "$(dig +short n.sni.global.fastly.net.) rum.hlx.page" | sudo tee -a /etc/hosts && sudo echo "$(dig +short n.sni.global.fastly.net.) www.blah.bla" | sudo tee -a /etc/hosts
+      run: sudo echo "$(dig +short rum.hlx.page.cdn.cloudflare.net | head -n 1) rum.hlx.page" | sudo tee -a /etc/hosts
+      # run: sudo echo "$(dig +short n.sni.global.fastly.net) rum.hlx.page" | sudo tee -a /etc/hosts && sudo echo "$(dig +short n.sni.global.fastly.net) www.blah.bla" | sudo tee -a /etc/hosts
 
     - name: Try out NS mapping
       run: sudo cat /etc/hosts && ping -c 1 rum.hlx.page
