@@ -6,7 +6,7 @@ const { test, expect } = require('@playwright/test');
 const { execSync } = require('child_process');
 
 function getTestID() {
-  let { RUM_TEST_ID } = process.env;
+  let { GITHUB_RUN_ID: RUM_TEST_ID } = process.env;
   if (!RUM_TEST_ID) {
     RUM_TEST_ID = Math.random().toString(36).substring(8);
   }
@@ -28,7 +28,7 @@ test('Make a request that triggers a RUM request', async ({ page }) => {
   const yesterdate = yesterday.toISOString().split('T')[0];
 
   const cmdline = `/* repository: adobe/rum-integrations */
-  bq query --format json --nouse_legacy_sql '--- comment adobe/rum-integrations
+  bq query --format json --nouse_legacy_sql '
     SELECT count(*) FROM \`helix-225321.helix_rum.cluster\`
     WHERE TIMESTAMP_TRUNC(time, DAY) > TIMESTAMP("${yesterdate}")
     AND hostname = "main--rum-integrations--adobe.aem.live" AND id = "${testID}" LIMIT 1'`;
