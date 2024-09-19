@@ -122,7 +122,8 @@ test('Query Coralogix', async () => {
   console.log('Yesterday:', yesterday);
   console.log('Now:', now);
 
-  const query0 = '{"query":"filter $l.applicationname ~ \'helix-rum-collector\' | lucene \'cdn.domain:docs.zebra.com\' | limit 1"}';
+  // const query0 = '{"query":"filter $l.applicationname ~ \'helix-rum-collector\'
+  // | lucene \'cdn.domain:docs.zebra.com\' | limit 1"}';
   // eslint-disable-next-line no-multi-str
   const query2 = '{"query":"source logs \
     | filter $l.applicationname ~ \'helix-rum-collector\' \
