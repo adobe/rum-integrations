@@ -7,7 +7,8 @@ This repository contains
 * A test component which checks the Coralogix database that the log entries for the request made earlier have arrived.
 * A GitHub Actions workflow which runs everything. Because of time delays between making the request and it being visible in Coralogix, these actions are split into two test jobs, where the second one waits 15 minutes before checking that the logs have arrived.
 
-The tests in this project are automatically run on a schedule and can be found in the [Actions](actions)
+The tests in this project are automatically run on a schedule and can be found in the
+[Actions](https://github.com/adobe/rum-integrations/actions)
 section.
 
 ## Installation
