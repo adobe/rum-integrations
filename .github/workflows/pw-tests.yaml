@@ -1,4 +1,4 @@
-name: RUM Integration End-to-End Tests
+name: RUM Integration End-to-End Tests with Fastly
 on:
   workflow_dispatch:
   schedule:
@@ -10,6 +10,8 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    outputs:
+      testid: ${{ steps.store_id.outputs.id }}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -33,7 +35,7 @@ jobs:
       run: cd test/pw && npm ci
 
     - name: Set up NS mapping
-      run: sudo echo "$(dig +short `test/scripting/get_rum_collector_backend.sh`) rum.hlx.page" | sudo tee -a /etc/hosts
+      run: sudo echo "$(dig +short n.sni.global.fastly.net | head -n 1) rum.hlx.page" | sudo tee -a /etc/hosts
 
     - name: Try out NS mapping
       run: echo '/etc/hosts:' && sudo cat /etc/hosts && echo 'getent hosts rum.hlx.page' && getent hosts rum.hlx.page
@@ -43,6 +45,9 @@ jobs:
 
     - name: Run Playwright tests
       run: cd test/pw && npm run test
+
+    - id: store_id
+      run: echo "id=${GITHUB_RUN_ID}" >> "$GITHUB_OUTPUT"
 
     - uses: actions/upload-artifact@v4
       if: always()
