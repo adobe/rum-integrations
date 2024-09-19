@@ -75,4 +75,5 @@ jobs:
       - name: Check Coralogix for request record
         env:
           CORALOGIX_TOKEN: ${{ secrets.CORALOGIX_TOKEN }}
+          JOB_ID: ${{needs.test-with-bigquery.outputs.testid}}
         run: npm t
