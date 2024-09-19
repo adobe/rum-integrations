@@ -71,7 +71,7 @@ jobs:
       - name: Retrieve and check job ID
         env:
           JOB_ID: ${{needs.test-with-bigquery.outputs.testid}}
-        run:  if [[ "$JOB_ID" != "GITHUB_RUN_ID" ]]; then false; fi
+        run:  if [[ "$JOB_ID" != "$GITHUB_RUN_ID" ]]; then false; fi
       - name: Check Coralogix for request record
         env:
           CORALOGIX_TOKEN: ${{ secrets.CORALOGIX_TOKEN }}
