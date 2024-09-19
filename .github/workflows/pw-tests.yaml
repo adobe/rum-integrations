@@ -55,3 +55,15 @@ jobs:
         name: playwright-report
         path: test/pw/playwright-report/
         retention-days: 30
+
+  check-coralogix:
+    timeout-minutes: 120
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Sleep for a little while until the data is ready in Coralogix
+        run: sleep 10
+      - name: Retrieve job ID
+        env:
+          JOB_ID: ${{needs.test.outputs.testid}}
+        run: echo 'Job ID:' $JOB_ID
