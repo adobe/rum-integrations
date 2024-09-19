@@ -61,9 +61,18 @@ jobs:
     runs-on: ubuntu-latest
     needs: test-with-bigquery
     steps:
-      - name: Sleep for a little while until the data is ready in Coralogix
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Sleep for 15 mins until the data is ready in Coralogix
         run: sleep 10
-      - name: Retrieve job ID
+      - name: Retrieve and check job ID
         env:
           JOB_ID: ${{needs.test-with-bigquery.outputs.testid}}
-        run: echo 'Job ID:' $JOB_ID
+        run:  if [[ "$JOB_ID" != "GITHUB_RUN_ID" ]]; then false; fi
+      - name: Check Coralogix for request record
+        env:
+          CORALOGIX_TOKEN: ${{ secrets.CORALOGIX_TOKEN }}
+        run: npm t
