@@ -54,13 +54,13 @@ describe('Coralogix', () => {
     }
 
     if (!result) {
-      throw new Error('No result found in Coralogix response');
+      throw new Error('No result with log records found in Coralogix response');
     }
 
     const json = JSON.parse(result);
     const results = json.result?.results;
     if (!results || results.length === 0) {
-      throw new Error('No results found in Coralogix response');
+      throw new Error('No log records found in Coralogix response');
     }
 
     const userdata = JSON.parse(results[0].userData);

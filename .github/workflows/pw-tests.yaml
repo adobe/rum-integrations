@@ -67,7 +67,7 @@ jobs:
           node-version: lts/*
 
       - name: Sleep for 15 mins until the data is ready in Coralogix
-        run: sleep 10
+        run: sleep 900
       - name: Retrieve and check job ID
         env:
           JOB_ID: ${{needs.test-with-bigquery.outputs.testid}}
