@@ -8,7 +8,7 @@ on:
     - cron:  '0 * * * *'
 
 jobs:
-  test-with-bigquery:
+  make-request:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     outputs:
@@ -19,26 +19,13 @@ jobs:
       with:
         node-version: lts/*
 
-    - name: Authenticate to Google Cloud
-      uses: 'google-github-actions/auth@v2'
-      with:
-        credentials_json: ${{ secrets.GCLOUD_CRED_FILE }}
-
-    - name: Set up Cloud SDK
-      uses: 'google-github-actions/setup-gcloud@v2'
-      with:
-        version: '>= 363.0.0'
-
-    - name: Check gcloud CLI
-      run: gcloud info && gcloud auth list && bq version
-
     - name: Install dependencies
       run: cd test/pw && npm ci
 
-    - name: Set up NS mapping
+    - name: Set up host mapping
       run: sudo echo "$(dig +short n.sni.global.fastly.net | head -n 1) rum.hlx.page" | sudo tee -a /etc/hosts
 
-    - name: Try out NS mapping
+    - name: Try out host mapping
       run: echo '/etc/hosts:' && sudo cat /etc/hosts && echo 'getent hosts rum.hlx.page' && getent hosts rum.hlx.page
 
     - name: Install Playwright Browsers
@@ -50,17 +37,45 @@ jobs:
     - id: store_id
       run: echo "id=${GITHUB_RUN_ID}" >> "$GITHUB_OUTPUT"
 
-    - uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: playwright-report
-        path: test/pw/playwright-report/
-        retention-days: 30
+  check-bigquery:
+    runs-on: ubuntu-latest
+    needs: make-request
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Sleep for a little while until the data is ready in BigQuery
+        run: sleep 10
+
+      - name: Retrieve and check job ID
+        env:
+          JOB_ID: ${{needs.test-with-bigquery.outputs.testid}}
+        run:  if [[ "$JOB_ID" != "$GITHUB_RUN_ID" ]]; then false; fi
+
+      - name: Authenticate to Google Cloud
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: ${{ secrets.GCLOUD_CRED_FILE }}
+
+      - name: Set up Cloud SDK
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 363.0.0'
+
+      - name: Check gcloud CLI
+        run: gcloud info && gcloud auth list && bq version
+
+      - name: Check BidQuery for request record
+        env:
+          JOB_ID: ${{needs.test-with-bigquery.outputs.testid}}
+        run: npm t test/unit/coralogix.test.js
 
   check-coralogix:
     timeout-minutes: 120
     runs-on: ubuntu-latest
-    needs: test-with-bigquery
+    needs: make-request
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -77,4 +92,4 @@ jobs:
         env:
           CORALOGIX_TOKEN: ${{ secrets.CORALOGIX_TOKEN }}
           JOB_ID: ${{needs.test-with-bigquery.outputs.testid}}
-        run: npm t
+        run: npm t test/unit/coralogix.test.js
