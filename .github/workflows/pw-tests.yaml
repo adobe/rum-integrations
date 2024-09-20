@@ -46,9 +46,6 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Sleep for a little while until the data is ready in BigQuery
-        run: sleep 10
-
       - name: Retrieve and check job ID
         env:
           JOB_ID: ${{needs.make-request.outputs.testid}}
