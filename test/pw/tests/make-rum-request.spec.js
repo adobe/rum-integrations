@@ -15,7 +15,7 @@ function getTestID() {
 }
 
 function checkBigQueryResult(testID) {
-  const yesterday = new Date(Date.now() - 10 * 60 * 1000);
+  const yesterday = new Date(Date.now() - 60 * 60 * 1000);
   const yesterdate = yesterday.toISOString().split('T')[0];
 
   const cmdline = `bq query --format json --nouse_legacy_sql '/* repository: adobe/rum-integrations */
@@ -55,7 +55,9 @@ test('Make a request that triggers a RUM request', async ({ page }) => {
   await expect(page.getByText('Boilerplate Highlights')).toBeVisible();
 
   // Wait 10 seconds for the rum request to appear at the backend
-  await page.waitForTimeout(10000);
+  const secswait = 10;
+  console.log('Waiting for', secswait, 'seconds for data to appear in BigQuery');
+  await page.waitForTimeout(secswait * 1000);
 
   await checkBigQueryResult(testID);
 });
