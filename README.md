@@ -3,8 +3,8 @@
 This repository contains
 
 * A sample Edge Delivery Services website which can be accessed from https://main--rum-integrations--adobe.aem.live/ - This is a basic Edge Delivery Services site for which the code for this can be found in this directory (blocks/scripts/styles etc)
-* A testcomponent which accesses this site using Playwright and then checks that the request has appeared in the Google BigQuery database. This is located in test/pw. It forces the RUM collections to go via a specific backend, currently always Fastly. Cloudflare is TODO.
-* A test component which checks the Coralogix database that the log entries for the request made earlier have arrived.
+* A testcomponent which accesses this site using Playwright and then checks that the request has appeared in the Google BigQuery database. This is located in `test/pw`. It forces the RUM collections to go via a specific backend, currently always Fastly. Cloudflare is TODO.
+* A test component which checks the Coralogix database that the log entries for the request made earlier have arrived. This can be found in `test/unit`.
 * A GitHub Actions workflow which runs everything. Because of time delays between making the request and it being visible in Coralogix, these actions are split into two test jobs, where the second one waits 15 minutes before checking that the logs have arrived.
 
 The tests in this project are automatically run on a schedule and can be found in the
