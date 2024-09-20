@@ -1,4 +1,5 @@
 name: RUM Integration End-to-End Tests with Fastly
+run-name: ${{ endsWith(github.job, '0') && 'option A' || 'option B' }}
 on:
   workflow_dispatch:
   schedule:
