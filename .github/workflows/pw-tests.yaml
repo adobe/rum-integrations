@@ -1,5 +1,5 @@
 name: RUM Integration End-to-End Tests
-run-name: ${{ endsWith(github.job, '0') || endsWith(github.job, '1') || endsWith(github.job, '2') || endsWith(github.job, '3') || endsWith(github.job, '4') && 'RUM Integration End-to-End Tests with Fastly' || 'RUM Integration End-to-End Tests with Fastly' }}
+run-name: ${{ endsWith(github.job, '0') || endsWith(github.job, '1') || endsWith(github.job, '2') || endsWith(github.job, '3') || endsWith(github.job, '4') && 'RUM Integration End-to-End Tests with Fastly' || 'RUM Integration End-to-End Tests with Cloudflare' }}
 on:
   workflow_dispatch:
   schedule:
