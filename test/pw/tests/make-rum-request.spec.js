@@ -15,7 +15,7 @@ function getTestID() {
 }
 
 function checkBigQueryResult(testID) {
-  const yesterday = new Date(Date.now() - 60 * 60 * 1000);
+  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
   const yesterdate = yesterday.toISOString().split('T')[0];
 
   const cmdline = `bq query --format json --nouse_legacy_sql '/* repository: adobe/rum-integrations */
