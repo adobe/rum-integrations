@@ -1,5 +1,5 @@
 name: RUM Integration End-to-End Tests
-run-name: ${{ endsWith(github.job, '0') && 'RUM Integration End-to-End Tests with Fastly' || endsWith(github.job, '1') && 'RUM Integration End-to-End Tests with Fastly' || endsWith(github.job, '2') && 'RUM Integration End-to-End Tests with Fastly' || endsWith(github.job, '3') && 'RUM Integration End-to-End Tests with Fastly' || endsWith(github.job, '4') && 'RUM Integration End-to-End Tests with Fastly' || 'RUM Integration End-to-End Tests with CloudFlare' }}
+run-name: ${{ github.job }}
 on:
   workflow_dispatch:
   schedule:
@@ -51,7 +51,7 @@ jobs:
 
       - name: Retrieve and check job ID
         env:
-          JOB_ID: ${{needs.test-with-bigquery.outputs.testid}}
+          JOB_ID: ${{needs.make-request.outputs.testid}}
         run:  if [[ "$JOB_ID" != "$GITHUB_RUN_ID" ]]; then false; fi
 
       - name: Authenticate to Google Cloud
@@ -69,7 +69,7 @@ jobs:
 
       - name: Check BidQuery for request record
         env:
-          JOB_ID: ${{needs.test-with-bigquery.outputs.testid}}
+          JOB_ID: ${{needs.make-request.outputs.testid}}
         run: npm t test/unit/coralogix.test.js
 
   check-coralogix:
@@ -86,10 +86,10 @@ jobs:
         run: sleep 900
       - name: Retrieve and check job ID
         env:
-          JOB_ID: ${{needs.test-with-bigquery.outputs.testid}}
+          JOB_ID: ${{needs.make-request.outputs.testid}}
         run:  if [[ "$JOB_ID" != "$GITHUB_RUN_ID" ]]; then false; fi
       - name: Check Coralogix for request record
         env:
           CORALOGIX_TOKEN: ${{ secrets.CORALOGIX_TOKEN }}
-          JOB_ID: ${{needs.test-with-bigquery.outputs.testid}}
+          JOB_ID: ${{needs.make-request.outputs.testid}}
         run: npm t test/unit/coralogix.test.js
