@@ -1,5 +1,5 @@
 name: RUM Integration End-to-End Tests
-run-name: Job ${{ github.job }}, started by @${{ github.actor }}
+run-name: Job ${{ github.run_id }}, started by @${{ github.actor }}
 on:
   workflow_dispatch:
   schedule:
