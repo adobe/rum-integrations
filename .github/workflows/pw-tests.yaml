@@ -9,7 +9,6 @@ on:
 
 jobs:
   make-request:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
     outputs:
       testid: ${{ steps.store_id.outputs.id }}
@@ -70,7 +69,7 @@ jobs:
         run: npm t test/unit/bigquery.test.js
 
   check-coralogix:
-    timeout-minutes: 120
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     needs: make-request
     steps:
@@ -90,3 +89,26 @@ jobs:
           CORALOGIX_TOKEN: ${{ secrets.CORALOGIX_TOKEN }}
           JOB_ID: ${{needs.make-request.outputs.testid}}
         run: npm t test/unit/coralogix.test.js
+
+  check-s3:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    needs: make-request
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Sleep for 15 mins until the data is ready in S3
+        run: sleep 900
+      - name: Retrieve and check job ID
+        env:
+          JOB_ID: ${{needs.make-request.outputs.testid}}
+        run:  if [[ "$JOB_ID" != "$GITHUB_RUN_ID" ]]; then false; fi
+      - name: Check s3 for request record
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          JOB_ID: ${{needs.make-request.outputs.testid}}
+        run: npm t test/unit/s3.test.js
