@@ -45,6 +45,8 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Sleep for 15 secs until the data is ready in BigQuery
+        run: sleep 15
       - name: Retrieve and check job ID
         env:
           JOB_ID: ${{needs.make-request.outputs.testid}}
@@ -66,7 +68,7 @@ jobs:
       - name: Check BigQuery for request record
         env:
           JOB_ID: ${{needs.make-request.outputs.testid}}
-        run: npm t test/unit/bigquery.test.js
+        run: npm it test/unit/bigquery.test.js
 
   check-coralogix:
     timeout-minutes: 60
@@ -88,7 +90,7 @@ jobs:
         env:
           CORALOGIX_TOKEN: ${{ secrets.CORALOGIX_TOKEN }}
           JOB_ID: ${{needs.make-request.outputs.testid}}
-        run: npm t test/unit/coralogix.test.js
+        run: npm it test/unit/coralogix.test.js
 
   check-s3:
     timeout-minutes: 60
@@ -111,4 +113,4 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           JOB_ID: ${{needs.make-request.outputs.testid}}
-        run: npm t test/unit/s3.test.js
+        run: npm it test/unit/s3.test.js
