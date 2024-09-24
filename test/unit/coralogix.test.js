@@ -2,10 +2,10 @@
 import assert from 'assert';
 import { it, describe } from 'node:test';
 
-const { GITHUB_RUN_ID: JOB_ID, CORALOGIX_TOKEN } = process.env;
+const { GITHUB_RUN_ID, CORALOGIX_TOKEN } = process.env;
 
-if (!JOB_ID) {
-  throw new Error('Missing JOB_ID');
+if (!GITHUB_RUN_ID) {
+  throw new Error('Missing GITHUB_RUN_ID');
 }
 if (!CORALOGIX_TOKEN) {
   throw new Error('Missing CORALOGIX_TOKEN');
@@ -19,7 +19,7 @@ describe('Coralogix', () => {
     const query = `{"query":"source logs \
     | filter $l.applicationname ~ 'helix-rum-collector' \
     | filter $d.cdn.domain ~ 'main--rum-integrations--adobe.aem.live' \
-    | filter $d.request.id ~ '${JOB_ID}' \
+    | filter $d.request.id ~ '${GITHUB_RUN_ID}' \
     | limit 1",
     "metadata": {
       "tier": "TIER_ARCHIVE",

@@ -3,10 +3,10 @@ import assert from 'assert';
 import { execSync } from 'child_process';
 import { it, describe } from 'node:test';
 
-const { GITHUB_RUN_ID: JOB_ID } = process.env;
+const { GITHUB_RUN_ID } = process.env;
 
-if (!JOB_ID) {
-  throw new Error('Missing JOB_ID');
+if (!GITHUB_RUN_ID) {
+  throw new Error('Missing GITHUB_RUN_ID');
 }
 
 describe('BigQuery', () => {
@@ -17,7 +17,7 @@ describe('BigQuery', () => {
     const cmdline = `bq query --format json --nouse_legacy_sql '/* repository: adobe/rum-integrations */
       SELECT count(*) FROM \`helix-225321.helix_rum.cluster\`
       WHERE TIMESTAMP_TRUNC(time, DAY) > TIMESTAMP("${yesterdate}")
-      AND hostname = "main--rum-integrations--adobe.aem.live" AND id = "${JOB_ID}" LIMIT 1'`;
+      AND hostname = "main--rum-integrations--adobe.aem.live" AND id = "${GITHUB_RUN_ID}" LIMIT 1'`;
     console.log('Executing: ', cmdline);
 
     let res;

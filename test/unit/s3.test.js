@@ -4,7 +4,7 @@ import assert from 'assert';
 import { it, describe } from 'node:test';
 import { gunzipSync } from 'node:zlib';
 
-const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, GITHUB_RUN_ID: JOB_ID } = process.env;
+const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, GITHUB_RUN_ID } = process.env;
 
 if (!AWS_ACCESS_KEY_ID) {
   throw new Error('Missing AWS_ACCESS_KEY_ID');
@@ -12,8 +12,8 @@ if (!AWS_ACCESS_KEY_ID) {
 if (!AWS_SECRET_ACCESS_KEY) {
   throw new Error('Missing AWS_SECRET_ACCESS_KEY');
 }
-if (!JOB_ID) {
-  throw new Error('Missing JOB_ID');
+if (!GITHUB_RUN_ID) {
+  throw new Error('Missing GITHUB_RUN_ID');
 }
 
 async function getObjectNames(client, date, addfactor) {
@@ -94,7 +94,7 @@ describe('S3', () => {
         for (const key of Object.keys(json.bundles)) {
           const bundle = json.bundles[key];
           console.log('Found ID:', bundle.id);
-          if (bundle.id === JOB_ID) {
+          if (bundle.id === GITHUB_RUN_ID) {
             assert.equal(bundle.url, 'https://main--rum-integrations--adobe.aem.live/');
             console.log('Found matching record:', bundle);
             return; // Found it, all good.
