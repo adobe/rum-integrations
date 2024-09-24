@@ -1,5 +1,15 @@
 name: RUM Integration End-to-End Tests
-run-name: ${{ endsWith(github.run_id, '0') && 'A' || endsWith(github.run_id, '1') && 'A' || endsWith(github.run_id, '2') && 'A' || endsWith(github.run_id, '3') && 'A' || endsWith(github.run_id, '4') && 'A' || 'B' }}, run id @${{ github.run_id }}
+run-name: <
+  ${{ endsWith(github.run_id, '0') && 'RUM Integration End-to-End Tests Fastly'
+  || endsWith(github.run_id, '1') && 'RUM Integration End-to-End Tests Fastly'
+  || endsWith(github.run_id, '2') && 'RUM Integration End-to-End Tests Fastly'
+  || endsWith(github.run_id, '3') && 'RUM Integration End-to-End Tests Fastly'
+  || endsWith(github.run_id, '4') && 'RUM Integration End-to-End Tests Cloudflare'
+  || endsWith(github.run_id, '5') && 'RUM Integration End-to-End Tests Cloudflare'
+  || endsWith(github.run_id, '6') && 'RUM Integration End-to-End Tests Cloudflare'
+  || endsWith(github.run_id, '7') && 'RUM Integration End-to-End Tests Cloudflare'
+  || 'RUM Integration End-to-End Tests DNS worker selection' }},
+  run id ${{ github.run_id }}
 on:
   workflow_dispatch:
   schedule:
