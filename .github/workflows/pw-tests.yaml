@@ -42,9 +42,6 @@ jobs:
     - name: Run Playwright tests
       run: cd test/pw && npm run test
 
-    # - name: Wait for an hour (temporarily)
-    #   run: sleep 3600
-
   check-bigquery:
     timeout-minutes: 120
     runs-on: ubuntu-latest
@@ -55,13 +52,10 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Retrieve worker used
+      - name: Retrieve worker used and add extra wait if needed
         env:
           WORKER: ${{needs.make-request.outputs.worker}}
-        run:  echo $WORKER
-
-      - name: Sleep for 15 secs until the data is ready in BigQuery
-        run: sleep 15
+        run: echo $WORKER && ./src/scripts/get_extra_sleep_for_worker.sh $WORKER
 
       - name: Authenticate to Google Cloud
         uses: 'google-github-actions/auth@v2'
@@ -89,10 +83,10 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Retrieve worker used
+      - name: Retrieve worker used and add extra wait if needed
         env:
           WORKER: ${{needs.make-request.outputs.worker}}
-        run:  echo $WORKER
+        run: echo $WORKER && ./src/scripts/get_extra_sleep_for_worker.sh $WORKER
 
       - name: Sleep for 15 mins until the data is ready in Coralogix
         run: sleep 900
@@ -112,10 +106,10 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Retrieve worker used
+      - name: Retrieve worker used and add extra wait if needed
         env:
           WORKER: ${{needs.make-request.outputs.worker}}
-        run:  echo $WORKER
+        run: echo $WORKER && ./src/scripts/get_extra_sleep_for_worker.sh $WORKER
 
       - name: Sleep for 15 mins until the data is ready in S3
         run: sleep 900
