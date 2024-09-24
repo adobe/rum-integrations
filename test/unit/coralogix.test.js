@@ -14,7 +14,7 @@ if (!CORALOGIX_TOKEN) {
 describe('Coralogix', () => {
   it('Check logs', async () => {
     const now = new Date().toISOString();
-    const lasthour = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const previous = new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString();
 
     const query = `{"query":"source logs \
     | filter $l.applicationname ~ 'helix-rum-collector' \
@@ -23,7 +23,7 @@ describe('Coralogix', () => {
     | limit 1",
     "metadata": {
       "tier": "TIER_ARCHIVE",
-      "startDate": "${lasthour}",
+      "startDate": "${previous}",
       "endDate": "${now}"
     }}`;
     console.log('Querying Coralogix with:', query);
