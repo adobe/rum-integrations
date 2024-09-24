@@ -30,8 +30,8 @@ jobs:
       env:
         WORKER: ${{ steps.select_worker.outputs.worker }}
       run: >
-        echo 'Worker:' $WORKER &&
-        sudo echo "$(dig +short n.sni.global.fastly.net | head -n 1) rum.hlx.page" | sudo tee -a /etc/hosts
+        echo 'RUM collector worker:' $WORKER &&
+        sudo ./src/scripts/map_host_for_worker.sh $WORKER
 
     - name: Try out host mapping
       run: echo '/etc/hosts:' && sudo cat /etc/hosts && echo 'getent hosts rum.hlx.page' && getent hosts rum.hlx.page
