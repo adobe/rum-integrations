@@ -1,5 +1,5 @@
 {
-  "name": "@adobe/aem-boilerplate",
+  "name": "rum-integrations",
   "private": true,
   "version": "1.3.0",
   "description": "End-to-End integration project for RUM",
@@ -21,12 +21,12 @@
   },
   "homepage": "https://github.com/adobe/aem-boilerplate#readme",
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.654",
+    "@aws-sdk/client-s3": "^3.657",
     "@babel/eslint-parser": "7.25.1",
-    "eslint": "8.57.0",
+    "eslint": "8.57.1",
     "eslint-config-airbnb-base": "15.0.0",
-    "eslint-plugin-import": "2.29.1",
-    "stylelint": "16.8.2",
+    "eslint-plugin-import": "2.30.0",
+    "stylelint": "16.9.0",
     "stylelint-config-standard": "36.0.1"
   }
 }

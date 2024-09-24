@@ -9,7 +9,7 @@ run-name: >
   || endsWith(github.run_id, '6') && 'RUM Integration End-to-End Tests Cloudflare'
   || endsWith(github.run_id, '7') && 'RUM Integration End-to-End Tests Cloudflare'
   || 'RUM Integration End-to-End Tests DNS worker selection' }},
-  run id ${{ github.run_id }}
+  ID ${{ github.run_id }}
 on:
   workflow_dispatch:
   schedule:
