@@ -2,7 +2,7 @@
 import assert from 'assert';
 import { it, describe } from 'node:test';
 
-const { JOB_ID, CORALOGIX_TOKEN } = process.env;
+const { GITHUB_RUN_ID: JOB_ID, CORALOGIX_TOKEN } = process.env;
 
 if (!JOB_ID) {
   throw new Error('Missing JOB_ID');

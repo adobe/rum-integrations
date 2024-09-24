@@ -3,7 +3,7 @@ import assert from 'assert';
 import { execSync } from 'child_process';
 import { it, describe } from 'node:test';
 
-const { JOB_ID } = process.env;
+const { GITHUB_RUN_ID: JOB_ID } = process.env;
 
 if (!JOB_ID) {
   throw new Error('Missing JOB_ID');

@@ -4,7 +4,7 @@ import assert from 'assert';
 import { it, describe } from 'node:test';
 import { gunzipSync } from 'node:zlib';
 
-const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, JOB_ID } = process.env;
+const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, GITHUB_RUN_ID: JOB_ID } = process.env;
 
 if (!AWS_ACCESS_KEY_ID) {
   throw new Error('Missing AWS_ACCESS_KEY_ID');

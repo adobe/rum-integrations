@@ -12,12 +12,15 @@ jobs:
     timeout-minutes: 120
     runs-on: ubuntu-latest
     outputs:
-      testid: ${{ steps.store_id.outputs.id }}
+      worker: ${{ steps.select_worker.outputs.worker }}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
+
+    - id: select_worker
+      run: echo "worker=`./src/scripts/select-worker.sh ${GITHUB_RUN_ID}`" >> "$GITHUB_OUTPUT"
 
     - name: Install dependencies
       run: cd test/pw && npm ci
@@ -34,11 +37,8 @@ jobs:
     - name: Run Playwright tests
       run: cd test/pw && npm run test
 
-    - id: store_id
-      run: echo "id=${GITHUB_RUN_ID}" >> "$GITHUB_OUTPUT"
-
-    - name: Wait for an hour (temporarily)
-      run: sleep 3600
+    # - name: Wait for an hour (temporarily)
+    #   run: sleep 3600
 
   check-bigquery:
     timeout-minutes: 120
@@ -50,12 +50,13 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Retrieve worker used
+        env:
+          WORKER: ${{needs.make-request.outputs.worker}}
+        run:  echo $WORKER
+
       - name: Sleep for 15 secs until the data is ready in BigQuery
         run: sleep 15
-      - name: Retrieve and check job ID
-        env:
-          JOB_ID: ${{needs.make-request.outputs.testid}}
-        run:  if [[ "$JOB_ID" != "$GITHUB_RUN_ID" ]]; then false; fi
 
       - name: Authenticate to Google Cloud
         uses: 'google-github-actions/auth@v2'
@@ -71,8 +72,6 @@ jobs:
         run: gcloud info && gcloud auth list && bq version
 
       - name: Check BigQuery for request record
-        env:
-          JOB_ID: ${{needs.make-request.outputs.testid}}
         run: npm i && npm t test/unit/bigquery.test.js
 
   check-coralogix:
@@ -85,16 +84,17 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Retrieve worker used
+        env:
+          WORKER: ${{needs.make-request.outputs.worker}}
+        run:  echo $WORKER
+
       - name: Sleep for 15 mins until the data is ready in Coralogix
         run: sleep 900
-      - name: Retrieve and check job ID
-        env:
-          JOB_ID: ${{needs.make-request.outputs.testid}}
-        run:  if [[ "$JOB_ID" != "$GITHUB_RUN_ID" ]]; then false; fi
+
       - name: Check Coralogix for request record
         env:
           CORALOGIX_TOKEN: ${{ secrets.CORALOGIX_TOKEN }}
-          JOB_ID: ${{needs.make-request.outputs.testid}}
         run: npm i && npm t test/unit/coralogix.test.js
 
   check-s3:
@@ -107,15 +107,16 @@ jobs:
         with:
           node-version: lts/*
 
+      - name: Retrieve worker used
+        env:
+          WORKER: ${{needs.make-request.outputs.worker}}
+        run:  echo $WORKER
+
       - name: Sleep for 15 mins until the data is ready in S3
         run: sleep 900
-      - name: Retrieve and check job ID
-        env:
-          JOB_ID: ${{needs.make-request.outputs.testid}}
-        run:  if [[ "$JOB_ID" != "$GITHUB_RUN_ID" ]]; then false; fi
+
       - name: Check s3 for request record
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          JOB_ID: ${{needs.make-request.outputs.testid}}
         run: npm i && npm t test/unit/s3.test.js
