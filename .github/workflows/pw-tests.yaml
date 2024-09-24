@@ -1,5 +1,5 @@
 name: RUM Integration End-to-End Tests
-run-name: <
+run-name: >
   ${{ endsWith(github.run_id, '0') && 'RUM Integration End-to-End Tests Fastly'
   || endsWith(github.run_id, '1') && 'RUM Integration End-to-End Tests Fastly'
   || endsWith(github.run_id, '2') && 'RUM Integration End-to-End Tests Fastly'
