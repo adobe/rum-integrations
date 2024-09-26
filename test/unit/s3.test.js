@@ -62,7 +62,7 @@ async function getFiles(client) {
 }
 
 describe('S3', () => {
-  it('Check log recors', async () => {
+  it('Check log records', async () => {
     const client = new S3Client({
       region: 'us-east-1',
       endpoint: 'https://s3.amazonaws.com',
