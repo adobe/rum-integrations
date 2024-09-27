@@ -14,10 +14,18 @@ describe('BigQuery', () => {
     const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const yesterdate = yesterday.toISOString().split('T')[0];
 
+    // Query from both the Fastly and Cloudflare driven storage and see that there are some results
+    // matching the request ID
     const cmdline = `bq query --format json --nouse_legacy_sql '/* repository: adobe/rum-integrations */
-      SELECT count(*) FROM \`helix-225321.helix_rum.cluster\`
-      WHERE TIMESTAMP_TRUNC(time, DAY) > TIMESTAMP("${yesterdate}")
-      AND hostname = "main--rum-integrations--adobe.aem.live" AND id = "${GITHUB_RUN_ID}" LIMIT 1'`;
+      SELECT count(*) FROM (
+        SELECT id FROM \`helix-225321.helix_rum.cluster\`
+        WHERE TIMESTAMP_TRUNC(time, DAY) > TIMESTAMP("${yesterdate}")
+        AND hostname = "main--rum-integrations--adobe.aem.live" AND id = "${GITHUB_RUN_ID}"
+        UNION ALL
+        SELECT id FROM \`helix-225321.helix_rum.cluster_cloudflare\`
+        WHERE TIMESTAMP_TRUNC(time, DAY) > TIMESTAMP("${yesterdate}")
+        AND hostname = "main--rum-integrations--adobe.aem.live" AND id = "${GITHUB_RUN_ID}"
+    )'`;
     console.log('Executing: ', cmdline);
 
     let res;
