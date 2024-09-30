@@ -9,7 +9,10 @@ This repository contains
 * A test component which checks the Coralogix database that the log entries for the request made earlier have arrived. This can be found in `test/unit/coralogix.test.js`.
 * A test component which checks the S3 backend that the log entries have arrived there. This can be found in `test/unit/s3.test.js`.
 * A GitHub Actions workflow which runs everything. It selects either Fastly and Cloudflare backends by modifying the `/etc/hosts` file on the test environment to point to a
-specific worker backend. Some tests are run without modifying `/etc/hosts` to let the usual DNS randomization do its work. The workflow is split up in a component that
+specific worker backend. Some tests are run without modifying `/etc/hosts` to let the usual DNS randomization do its work.
+You can see which one is selected in the test run title, e.g. **RUM Integration End-to-End Tests Fastly** has the /etc/hosts modified to resolve to Fastly. Test runs with the
+title **RUM Integration End-to-End Tests DNS worker selection** do not have the /etc/hosts modified, so can be handled by either.  
+The workflow is split up in a component that
 generates the data, and then multiple workflows that check the backends. Depending on the worker platform and backend used, data is forwarded to the backends only periodically
 so waits of up to an hour are sometimes needed before the check can be made.
 
