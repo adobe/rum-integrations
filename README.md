@@ -7,7 +7,7 @@ This repository contains
 * A testcomponent which accesses this site using Playwright to trigger the RUM request. This is located in `test/pw`.
 * A test component written as a unit test which checks that the request has appeared in the Google BigQuery database. Located in `test/unit/bigquery.test.js`.
 * A test component which checks the Coralogix database that the log entries for the request made earlier have arrived. This can be found in `test/unit/coralogix.test.js`.
-* A test component which checks the S3 backend that the log entries have arrived there. This can be found in `test/unit/coralogix.test.js`.
+* A test component which checks the S3 backend that the log entries have arrived there. This can be found in `test/unit/s3.test.js`.
 * A GitHub Actions workflow which runs everything. It selects either Fastly and Cloudflare backends by modifying the `/etc/hosts` file on the test environment to point to a
 specific worker backend. Some tests are run without modifying `/etc/hosts` to let the usual DNS randomization do its work. The workflow is split up in a component that
 generates the data, and then multiple workflows that check the backends. Depending on the worker platform and backend used, data is forwarded to the backends only periodically
