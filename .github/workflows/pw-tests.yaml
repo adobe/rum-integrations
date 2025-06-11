@@ -14,8 +14,8 @@ on:
   workflow_dispatch:
   schedule:
     # * is a special character in YAML so you have to quote this string
-    # every hour
-    - cron:  '0 * * * *'
+    # Once a day at 10:00 UTC
+    - cron:  '0 10 * * *'
 
 jobs:
   make-request:
