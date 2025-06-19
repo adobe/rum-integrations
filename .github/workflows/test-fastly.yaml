@@ -1,4 +1,4 @@
-name: Call a reusable workflow
+name: Fastly RUM Integration End-to-End Tests
 
 on:
   workflow_dispatch:
@@ -8,3 +8,4 @@ jobs:
     uses: ./.github/workflows/test-common.yaml
     with:
       worker: FASTLY
+    secrets: inherit
