@@ -1,26 +1,122 @@
-name: Reusable workflow example
+name: RUM Integration End-to-End Tests Shared Workflow
 
 on:
   workflow_call:
     inputs:
-      config-path:
+      worker:
         required: true
         type: string
 
-
 jobs:
-  triage:
+  make-request:
+    timeout-minutes: 120
     runs-on: ubuntu-latest
+    outputs:
+      worker: ${{ steps.select_worker.outputs.worker }}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
 
-    - id: echo_config_path
-      name: Echo config path
-      run: echo "config_path=${{ inputs.config-path }}"
-
     - id: select_worker
       name: Select worker to use for RUM-collector
-      run: echo "worker=`./src/scripts/select-worker.sh ${GITHUB_RUN_ID}`" >> "$GITHUB_OUTPUT"
+      run: echo "worker=${{ inputs.worker }}" >> "$GITHUB_OUTPUT"
+      # run: echo "worker=`./src/scripts/select-worker.sh ${GITHUB_RUN_ID}`" >> "$GITHUB_OUTPUT"
+
+    - name: Install dependencies
+      run: cd test/pw && npm ci
+
+    - name: Set up host mapping
+      env:
+        WORKER: ${{ steps.select_worker.outputs.worker }}
+      run: >
+        echo 'RUM collector worker:' $WORKER &&
+        sudo ./src/scripts/map_host_for_worker.sh $WORKER
+
+    - name: Try out host mapping
+      run: echo '/etc/hosts:' && sudo cat /etc/hosts && echo 'getent hosts rum.hlx.page' && getent hosts rum.hlx.page
+
+    - name: Install Playwright Browsers
+      run: cd test/pw && npx playwright install --with-deps chromium
+
+    - name: Run Playwright tests
+      run: cd test/pw && npm run test
+
+  check-bigquery:
+    timeout-minutes: 120
+    runs-on: ubuntu-latest
+    needs: make-request
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Retrieve worker used and add extra wait if needed
+        env:
+          WORKER: ${{needs.make-request.outputs.worker}}
+        run: echo $WORKER && ./src/scripts/get_extra_sleep_for_worker.sh $WORKER
+
+      - name: Authenticate to Google Cloud
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: ${{ secrets.GCLOUD_CRED_FILE }}
+
+      - name: Set up Cloud SDK
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 363.0.0'
+
+      - name: Check gcloud CLI
+        run: gcloud info && gcloud auth list && bq version
+
+      - name: Check BigQuery for request record
+        run: npm i && npm t test/unit/bigquery.test.js
+
+  check-coralogix:
+    timeout-minutes: 120
+    runs-on: ubuntu-latest
+    needs: make-request
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Retrieve worker used and add extra wait if needed
+        env:
+          WORKER: ${{needs.make-request.outputs.worker}}
+        run: echo $WORKER && ./src/scripts/get_extra_sleep_for_worker.sh $WORKER
+
+      - name: Sleep for 15 mins until the data is ready in Coralogix
+        run: sleep 900
+
+      - name: Check Coralogix for request record
+        env:
+          CORALOGIX_TOKEN: ${{ secrets.CORALOGIX_TOKEN }}
+        run: npm i && npm t test/unit/coralogix.test.js
+
+  check-s3:
+    timeout-minutes: 120
+    runs-on: ubuntu-latest
+    needs: make-request
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Retrieve worker used and add extra wait if needed
+        env:
+          WORKER: ${{needs.make-request.outputs.worker}}
+        run: echo $WORKER && ./src/scripts/get_extra_sleep_for_worker.sh $WORKER
+
+      - name: Sleep for 15 mins until the data is ready in S3
+        run: sleep 900
+
+      - name: Check s3 for request record
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: npm i && npm t test/unit/s3.test.js

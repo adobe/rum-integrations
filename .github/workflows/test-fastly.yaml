@@ -7,4 +7,4 @@ jobs:
   call-workflow-passing-data:
     uses: ./.github/workflows/test-common.yaml
     with:
-      config-path: Fastly!
+      worker: FASTLY
