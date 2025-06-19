@@ -22,7 +22,6 @@ jobs:
     - id: select_worker
       name: Select worker to use for RUM-collector
       run: echo "worker=${{ inputs.worker }}" >> "$GITHUB_OUTPUT"
-      # run: echo "worker=`./src/scripts/select-worker.sh ${GITHUB_RUN_ID}`" >> "$GITHUB_OUTPUT"
 
     - name: Install dependencies
       run: cd test/pw && npm ci
@@ -101,6 +100,7 @@ jobs:
     timeout-minutes: 120
     runs-on: ubuntu-latest
     needs: make-request
+    if: inputs.worker == 'FASTLY'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
