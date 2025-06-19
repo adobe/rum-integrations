@@ -2,6 +2,10 @@ name: DNS-selected worker Optel Integration End-to-End Tests
 
 on:
   workflow_dispatch:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    # Run at 13:15 UTC on Monday to Thursday
+    - cron:  '15 13 * * 1-4'
 
 jobs:
   optel:
