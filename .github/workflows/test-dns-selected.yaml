@@ -1,0 +1,11 @@
+name: DNS-selected worker Optel Integration End-to-End Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  optel:
+    uses: ./.github/workflows/test-common.yaml
+    with:
+      worker: DNS
+    secrets: inherit

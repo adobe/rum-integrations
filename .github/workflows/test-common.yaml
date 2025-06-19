@@ -1,4 +1,4 @@
-name: RUM Integration End-to-End Tests Shared Workflow
+name: Optel Integration End-to-End Tests Shared Workflow
 
 on:
   workflow_call:

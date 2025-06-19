@@ -1,0 +1,11 @@
+name: Cloudflare Optel Integration End-to-End Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  cloudflare:
+    uses: ./.github/workflows/test-common.yaml
+    with:
+      worker: CLOUDFLARE
+    secrets: inherit
