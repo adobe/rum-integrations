@@ -1,4 +1,4 @@
-name: Fastly Optel Integration End-to-End Tests
+name: Fastly worker Optel Integration End-to-End Tests
 
 on:
   workflow_dispatch:
