@@ -1,4 +1,4 @@
-name: Optel Integration End-to-End Tests Shared Workflow
+name: Optel End-to-End Tests Shared
 
 on:
   workflow_call:

@@ -1,4 +1,4 @@
-name: Cloudflare worker Optel Integration End-to-End Tests
+name: Cloudflare worker Optel End-to-End Tests
 
 on:
   workflow_dispatch:
