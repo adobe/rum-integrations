@@ -1,0 +1,10 @@
+name: Call a reusable workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-workflow-passing-data:
+    uses: ./.github/workflows/test-common.yaml
+    with:
+      config-path: Fastly!
