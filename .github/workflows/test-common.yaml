@@ -100,7 +100,6 @@ jobs:
     timeout-minutes: 120
     runs-on: ubuntu-latest
     needs: make-request
-    if: inputs.worker == 'FASTLY'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
