@@ -30,7 +30,7 @@ async function getObjectNames(client, date, addfactor) {
   const loc = new ListObjectsV2Command(loin);
   try {
     const resp = await client.send(loc);
-    resp.Contents.forEach((obj) => {
+    resp.Contents?.forEach((obj) => {
       const fname = obj.Key.split('/').pop();
       const fnum = fname.split('.').shift();
       if (fnum.length > 0) {
