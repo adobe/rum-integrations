@@ -7,7 +7,7 @@ else
     echo "Running with Cloudflare or potential Cloudflare worker"
     if [ "$TASK" = "s3" ]; then
         echo "Cloudflare s3 extra sleep"
-        sleep 2700
+        sleep 1800
     else
         echo "Cloudflare extra sleep"
         sleep 5400
