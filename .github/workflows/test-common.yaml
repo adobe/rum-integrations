@@ -55,7 +55,7 @@ jobs:
       - name: Retrieve worker used and add extra wait if needed
         env:
           WORKER: ${{needs.make-request.outputs.worker}}
-        run: echo $WORKER && ./src/scripts/get_extra_sleep_for_worker.sh $WORKER
+        run: echo $WORKER && ./src/scripts/get_extra_sleep_for_worker.sh $WORKER bigquery
 
       - name: Authenticate to Google Cloud
         uses: 'google-github-actions/auth@v2'
@@ -86,7 +86,7 @@ jobs:
       - name: Retrieve worker used and add extra wait if needed
         env:
           WORKER: ${{needs.make-request.outputs.worker}}
-        run: echo $WORKER && ./src/scripts/get_extra_sleep_for_worker.sh $WORKER
+        run: echo $WORKER && ./src/scripts/get_extra_sleep_for_worker.sh $WORKER coralogix
 
       - name: Sleep for 15 mins until the data is ready in Coralogix
         run: sleep 900
@@ -109,10 +109,10 @@ jobs:
       - name: Retrieve worker used and add extra wait if needed
         env:
           WORKER: ${{needs.make-request.outputs.worker}}
-        run: echo $WORKER && ./src/scripts/get_extra_sleep_for_worker.sh $WORKER
+        run: echo $WORKER && ./src/scripts/get_extra_sleep_for_worker.sh $WORKER s3
 
       - name: Sleep for 45 mins until the data is ready in S3
-        run: sleep 2700
+        run: sleep 3600
 
       - name: Check s3 for request record
         env:
