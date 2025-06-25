@@ -112,7 +112,7 @@ jobs:
         run: echo $WORKER && ./src/scripts/get_extra_sleep_for_worker.sh $WORKER s3
 
       - name: Sleep for 2 hours until the data is ready in S3
-        run: sleep 7200
+        run: sleep 900
 
       - name: Check s3 for request record
         env:
