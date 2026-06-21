@@ -14,7 +14,7 @@ jobs:
     outputs:
       worker: ${{ steps.select_worker.outputs.worker }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: make-request
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: make-request
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
@@ -101,7 +101,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: make-request
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
